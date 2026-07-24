@@ -2,7 +2,7 @@
 node_modules/
 
 # 记账数据（你的隐私，不应上传）
-data/
+/data/
 
 # 编译产物（可重新生成）
 dist/
