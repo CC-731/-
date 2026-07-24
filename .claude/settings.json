@@ -78,7 +78,9 @@
       "Bash(git init *)",
       "Bash(git config *)",
       "Bash(git add *)",
-      "Bash(git commit -m '项目初始化：黑马记账第一版 *)"
+      "Bash(git commit -m '项目初始化：黑马记账第一版 *)",
+      "Bash(git commit *)",
+      "Bash(rm -f test-*.js test-*.cjs test-*.mjs)"
     ],
     "additionalDirectories": [
       "D:\\黑马记账app"
