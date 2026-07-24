@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Table, Tag, Button, Popconfirm, message, Select, Space, Card } from 'antd'
-import { DeleteOutlined, ReloadOutlined } from '@ant-design/icons'
+import { DeleteOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons'
+import * as XLSX from 'xlsx'
 import type { ColumnsType } from 'antd/es/table'
 import { Bill } from '../types'
 import { categories } from '../data/categories'
@@ -43,6 +44,39 @@ export default function BillList() {
 
   // 计算总金额
   const totalAmount = bills.reduce((sum, bill) => sum + bill.amount, 0)
+
+  // 导出 Excel
+  const handleExport = () => {
+    if (bills.length === 0) {
+      message.warning('没有数据可以导出')
+      return
+    }
+
+    const exportData = bills.map((bill) => ({
+      '日期': bill.date,
+      '一级分类': bill.category_l1,
+      '二级分类': bill.category_l2,
+      '金额（元）': bill.amount,
+      '备注': bill.note || '',
+    }))
+
+    const ws = XLSX.utils.json_to_sheet(exportData)
+    // 设置列宽
+    ws['!cols'] = [
+      { wch: 14 },  // 日期
+      { wch: 10 },  // 一级分类
+      { wch: 10 },  // 二级分类
+      { wch: 12 },  // 金额
+      { wch: 30 },  // 备注
+    ]
+
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, '账单明细')
+
+    const fileName = `黑马记账_${new Date().toISOString().slice(0, 10)}.xlsx`
+    XLSX.writeFile(wb, fileName)
+    message.success('导出成功！')
+  }
 
   const columns: ColumnsType<Bill> = [
     {
@@ -122,6 +156,9 @@ export default function BillList() {
           />
           <Button icon={<ReloadOutlined />} onClick={loadBills}>
             刷新
+          </Button>
+          <Button icon={<DownloadOutlined />} onClick={handleExport} type="primary" ghost>
+            导出 Excel
           </Button>
         </Space>
 

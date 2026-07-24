@@ -80,7 +80,11 @@
       "Bash(git add *)",
       "Bash(git commit -m '项目初始化：黑马记账第一版 *)",
       "Bash(git commit *)",
-      "Bash(rm -f test-*.js test-*.cjs test-*.mjs)"
+      "Bash(rm -f test-*.js test-*.cjs test-*.mjs)",
+      "Bash(npm install *)",
+      "Bash(printf '{\"amount\":25.50,\"date\":\"2026-07-24\",\"category_l1\":\"餐饮\",\"category_l2\":\"晚餐\",\"note\":\"外卖炸鸡\"}')",
+      "Bash(curl -s -X POST http://localhost:3456/api/bills -H \"Content-Type: application/json; charset=utf-8\" -d @/tmp/test_export.json)",
+      "Bash(git commit -m '新增: Excel 导出功能 *)"
     ],
     "additionalDirectories": [
       "D:\\黑马记账app"
