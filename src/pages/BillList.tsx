@@ -4,14 +4,20 @@ import { DeleteOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/ic
 import * as XLSX from 'xlsx'
 import type { ColumnsType } from 'antd/es/table'
 import { Bill } from '../types'
-import { categories } from '../data/categories'
+import { getMergedCategories, refreshMergedCategories } from '../data/categories'
+import type { Category } from '../data/categories'
 import { CategoryTag } from '../components/CategoryPicker'
 import { getBills, deleteBill } from '../api'
 
 export default function BillList() {
   const [bills, setBills] = useState<Bill[]>([])
   const [loading, setLoading] = useState(false)
+  const [mergedCategories, setMergedCategories] = useState<Category[]>([])
   const [filterCategory, setFilterCategory] = useState<string | undefined>()
+
+  useEffect(() => {
+    refreshMergedCategories().then(setMergedCategories)
+  }, [])
 
   const loadBills = useCallback(async () => {
     setLoading(true)
@@ -149,7 +155,7 @@ export default function BillList() {
             onChange={setFilterCategory}
             allowClear
             style={{ width: 180 }}
-            options={categories.map((c) => ({
+            options={mergedCategories.map((c) => ({
               label: `${c.icon} ${c.name}`,
               value: c.name,
             }))}

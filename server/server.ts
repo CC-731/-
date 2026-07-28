@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { initDatabase, getBills, addBill, deleteBill, getCategoryStats } from './database.js'
+import { initDatabase, getBills, addBill, deleteBill, getCategoryStats, getUserCategories, addUserCategory, updateUserCategory, deleteUserCategory } from './database.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -66,6 +66,67 @@ app.get('/api/stats', (_req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: '加载统计失败' })
+  }
+})
+
+// ====== 用户分类管理 API ======
+
+// 获取所有用户自定义分类
+app.get('/api/user-categories', (_req, res) => {
+  try {
+    const categories = getUserCategories()
+    res.json(categories)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: '加载分类失败' })
+  }
+})
+
+// 新增用户自定义分类
+app.post('/api/user-categories', (req, res) => {
+  try {
+    const { name, icon, subs } = req.body
+    if (!name || !subs || subs.length === 0) {
+      return res.status(400).json({ error: '请填写分类名称和至少一个小类' })
+    }
+    const result = addUserCategory({ name, icon: icon || '📌', subs })
+    res.json(result)
+  } catch (err: any) {
+    console.error(err)
+    res.status(400).json({ error: err.message || '新增分类失败' })
+  }
+})
+
+// 更新用户自定义分类
+app.put('/api/user-categories/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const { name, icon, subs, oldName } = req.body
+    if (!name || !subs || subs.length === 0) {
+      return res.status(400).json({ error: '请填写分类名称和至少一个小类' })
+    }
+    const result = updateUserCategory(id, {
+      name,
+      icon: icon || '📌',
+      subs,
+      oldName: oldName || name,
+    })
+    res.json(result)
+  } catch (err: any) {
+    console.error(err)
+    res.status(400).json({ error: err.message || '更新分类失败' })
+  }
+})
+
+// 删除用户自定义分类
+app.delete('/api/user-categories/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const result = deleteUserCategory(id)
+    res.json(result)
+  } catch (err: any) {
+    console.error(err)
+    res.status(400).json({ error: err.message || '删除分类失败' })
   }
 })
 

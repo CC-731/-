@@ -61,3 +61,47 @@ export const categories: Category[] = [
     subs: ['人情往来', '宠物', '投资理财', '其他杂项'],
   },
 ]
+
+// ====== 分类合并：预设 + 用户自定义 ======
+
+import { getUserCategories } from '../api'
+
+// 合并缓存，初始只包含预设分类
+let mergedCache: Category[] = [...categories]
+
+// 获取合并后的分类（同步，返回缓存值）
+export function getMergedCategories(): Category[] {
+  return mergedCache
+}
+
+// 刷新合并分类缓存（异步，从数据库拉取用户分类并与预设合并）
+export async function refreshMergedCategories(): Promise<Category[]> {
+  try {
+    const userCategories = await getUserCategories()
+    const userConverted: Category[] = userCategories.map((uc) => ({
+      name: uc.name,
+      icon: uc.icon,
+      subs: uc.subs,
+    }))
+    mergedCache = [...categories, ...userConverted]
+  } catch {
+    // 加载失败时保留预设分类
+    mergedCache = [...categories]
+  }
+  return mergedCache
+}
+
+// 直接获取合并分类（异步，不依赖缓存）
+export async function getAllCategories(): Promise<Category[]> {
+  try {
+    const userCategories = await getUserCategories()
+    const userConverted: Category[] = userCategories.map((uc) => ({
+      name: uc.name,
+      icon: uc.icon,
+      subs: uc.subs,
+    }))
+    return [...categories, ...userConverted]
+  } catch {
+    return [...categories]
+  }
+}

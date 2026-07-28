@@ -16,6 +16,16 @@ export interface CategoryStat {
   total: number
 }
 
+// 用户自定义分类类型
+export interface UserCategory {
+  id: number
+  name: string
+  icon: string
+  subs: string[]
+  created_at: string
+  updated_at: string
+}
+
 // Electron API 类型声明
 export interface ElectronAPI {
   getBills: (filter?: { category_l1?: string }) => Promise<Bill[]>

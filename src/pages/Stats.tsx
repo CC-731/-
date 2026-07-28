@@ -3,7 +3,7 @@ import { Card, Statistic, Row, Col, Table, message } from 'antd'
 import { WalletOutlined, FileTextOutlined } from '@ant-design/icons'
 import type { ColumnsType } from 'antd/es/table'
 import { CategoryStat } from '../types'
-import { categories } from '../data/categories'
+import { getMergedCategories } from '../data/categories'
 import { getStats } from '../api'
 
 export default function Stats() {
@@ -30,7 +30,7 @@ export default function Stats() {
   const totalCount = stats.reduce((sum, s) => sum + s.count, 0)
 
   const getCategoryIcon = (name: string) => {
-    return categories.find((c) => c.name === name)?.icon || '📦'
+    return getMergedCategories().find((c) => c.name === name)?.icon || '📦'
   }
 
   const columns: ColumnsType<CategoryStat> = [

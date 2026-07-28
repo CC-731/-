@@ -4,14 +4,16 @@ import {
   PlusCircleOutlined,
   UnorderedListOutlined,
   PieChartOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons'
 import AddBill from './pages/AddBill'
 import BillList from './pages/BillList'
 import Stats from './pages/Stats'
+import CategoryManage from './pages/CategoryManage'
 
 const { Header, Content, Sider } = Layout
 
-type Page = 'add' | 'list' | 'stats'
+type Page = 'add' | 'list' | 'stats' | 'categories'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('list')
@@ -20,6 +22,7 @@ export default function App() {
     { key: 'list', icon: <UnorderedListOutlined />, label: '账单列表' },
     { key: 'add', icon: <PlusCircleOutlined />, label: '记一笔' },
     { key: 'stats', icon: <PieChartOutlined />, label: '统计' },
+    { key: 'categories', icon: <AppstoreOutlined />, label: '分类管理' },
   ]
 
   const renderPage = () => {
@@ -30,6 +33,8 @@ export default function App() {
         return <BillList />
       case 'stats':
         return <Stats />
+      case 'categories':
+        return <CategoryManage />
     }
   }
 

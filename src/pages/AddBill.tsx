@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Form, Input, InputNumber, DatePicker, Button, message, Card } from 'antd'
 import { SaveOutlined } from '@ant-design/icons'
 import CategoryPicker from '../components/CategoryPicker'
 import { addBill as apiAddBill } from '../api'
+import { refreshMergedCategories } from '../data/categories'
+import type { Category } from '../data/categories'
 import dayjs from 'dayjs'
 
 // 简单日期格式化（不依赖外部库）
@@ -20,10 +22,15 @@ interface AddBillProps {
 export default function AddBill({ onSuccess }: AddBillProps) {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
+  const [mergedCategories, setMergedCategories] = useState<Category[]>([])
   const [categoryValue, setCategoryValue] = useState<{
     category_l1: string
     category_l2: string
   }>({ category_l1: '', category_l2: '' })
+
+  useEffect(() => {
+    refreshMergedCategories().then(setMergedCategories)
+  }, [])
 
   const handleSubmit = async (values: {
     amount: number
@@ -111,6 +118,7 @@ export default function AddBill({ onSuccess }: AddBillProps) {
           <CategoryPicker
             value={categoryValue}
             onChange={(val) => setCategoryValue(val)}
+            categories={mergedCategories}
           />
         </Form.Item>
 
