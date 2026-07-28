@@ -84,10 +84,35 @@
       "Bash(npm install *)",
       "Bash(printf '{\"amount\":25.50,\"date\":\"2026-07-24\",\"category_l1\":\"餐饮\",\"category_l2\":\"晚餐\",\"note\":\"外卖炸鸡\"}')",
       "Bash(curl -s -X POST http://localhost:3456/api/bills -H \"Content-Type: application/json; charset=utf-8\" -d @/tmp/test_export.json)",
-      "Bash(git commit -m '新增: Excel 导出功能 *)"
+      "Bash(git commit -m '新增: Excel 导出功能 *)",
+      "Bash(curl -s http://localhost:3456/api/user-categories)",
+      "Bash(curl -s -X POST http://localhost:3456/api/user-categories -H 'Content-Type: application/json' -d '{\"name\":\"投资\",\"icon\":\"💰\",\"subs\":[\"股票\",\"基金\",\"债券\"]}')",
+      "Bash(npx kill-port *)",
+      "Bash(git commit -m '新增: 用户自定义分类管理功能 *)",
+      "Bash(npm start *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 42672 /F)",
+      "Bash(cmd //c \"taskkill /PID 42672 /F\")",
+      "Bash(cmd //c \"start http://localhost:3456\")",
+      "Bash(taskkill /PID 36248 /F)",
+      "Bash(cmd //c \"taskkill /PID 36248 /F\")",
+      "Bash(cmd //c \"taskkill /PID 4928 /F\")",
+      "Bash(cmd //c \"taskkill /PID 37968 /F && cd \\\\\"d:\\\\黑马记账app\\\\\" && npm start\")",
+      "Bash(ls -la \"$HOME/.ssh/\" 2>/dev/null || echo \"No .ssh directory found\")",
+      "Bash(mkdir -p 'C:\\\\Users\\\\73178/.ssh')",
+      "Bash(ssh-keygen -t ed25519 -C heimaa-accounting@github -f 'C:\\\\Users\\\\73178/.ssh/id_ed25519' -N '')",
+      "Read(//c/Users/73178/.ssh/**)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(ssh-keyscan -t ed25519 github.com >> \"$HOME/.ssh/known_hosts\" 2>/dev/null && echo \"GitHub已添加到可信列表\")",
+      "Bash(git checkout *)",
+      "Bash(cmd //c \"taskkill /PID 43652 /F\")",
+      "Bash(cmd //c \"taskkill /PID 15996 /F\")"
     ],
     "additionalDirectories": [
-      "D:\\黑马记账app"
+      "D:\\黑马记账app",
+      "C:\\Users\\73178\\.ssh"
     ]
   }
 }

@@ -10,10 +10,11 @@ import AddBill from './pages/AddBill'
 import BillList from './pages/BillList'
 import Stats from './pages/Stats'
 import CategoryManage from './pages/CategoryManage'
+import SnakeGame from './pages/SnakeGame'
 
 const { Header, Content, Sider } = Layout
 
-type Page = 'add' | 'list' | 'stats' | 'categories'
+type Page = 'add' | 'list' | 'stats' | 'categories' | 'game'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('list')
@@ -23,6 +24,7 @@ export default function App() {
     { key: 'add', icon: <PlusCircleOutlined />, label: '记一笔' },
     { key: 'stats', icon: <PieChartOutlined />, label: '统计' },
     { key: 'categories', icon: <AppstoreOutlined />, label: '分类管理' },
+    { key: 'game', icon: <span>🐍</span>, label: '贪吃蛇' },
   ]
 
   const renderPage = () => {
@@ -35,6 +37,8 @@ export default function App() {
         return <Stats />
       case 'categories':
         return <CategoryManage />
+      case 'game':
+        return <SnakeGame />
     }
   }
 
