@@ -49,8 +49,8 @@ tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 
 ## 第五阶段：写入测试标记文件（供 gitcommit-agent 使用）
 
-> ⚠️ 这个阶段只在**非交互模式**下执行——即当 tester 被 gitcommit-agent 自动调用时。
-> 如果用户直接跟你对话要求测试，先正常输出报告，**然后**也写入 marker 文件。
+> ⚠️ 无论是被 gitcommit-agent 自动调用，还是用户手动调用你，都**必须**在测试完成后写入 marker 文件。
+> 先输出正常的测试报告给用户看，然后立即写入 marker。
 
 ### 写入路径
 
@@ -63,17 +63,22 @@ tools: Read, Write, Edit, Grep, Glob, Bash, Skill
    ```bash
    git rev-parse HEAD
    ```
-3. **汇总测试结果**：
+3. **获取暂存区树哈希**（用于检测工作区是否在测试后被修改）：
+   ```bash
+   git write-tree 2>/dev/null || echo "no-commits-yet"
+   ```
+4. **汇总测试结果**：
    - 总用例数（total）、通过数（passed）、失败数（failed）
    - 通过率（pass_rate = passed / total * 100）
    - 失败的测试详情列表
-4. **用 Write 工具写入 JSON 文件**，格式如下：
+5. **用 Write 工具写入 JSON 文件**，格式如下：
 
 ```json
 {
   "agent": "tester",
   "timestamp": "2026-07-29T14:30:00.000Z",
   "commit_hash": "abc1234",
+  "staged_tree": "abc123...",
   "outcome": "pass",
   "summary": {
     "total": 26,

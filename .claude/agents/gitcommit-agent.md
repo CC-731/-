@@ -76,25 +76,31 @@ sleep 10 && test -f .claude/markers/test-result.json && echo "test-ready" || ech
 
 **测试通行证**（test-result.json）：
 ```
-通过条件：
+通过条件（五重验证）：
   outcome === "pass"
   AND threshold.met === true
   AND commit_hash === 当前 HEAD hash
+  AND staged_tree === 当前暂存区树哈希（git write-tree）
+  AND timestamp 距今 <= 30 分钟
 ```
 
 **质量通行证**（quality-result.json）：
 ```
-通过条件：
+通过条件（五重验证）：
   outcome === "pass"
   AND threshold.met === true
   AND commit_hash === 当前 HEAD hash
+  AND staged_tree === 当前暂存区树哈希（git write-tree）
+  AND timestamp 距今 <= 30 分钟
 ```
 
 **判决**：
 ```
 双通过 → ✅ 进入阶段五（提交）
-任一不通过 → ❌ 拒绝，输出失败原因（进入阶段六）
+任一不通过 → ❌ 拒绝，输出失败原因（进入阶段七）
 commit_hash 不匹配 → ❌ 拒绝，提示"代码在检查期间被修改"
+staged_tree 不匹配 → ❌ 拒绝，提示"代码在检查期间被修改"
+timestamp 超过 30 分钟 → ❌ 拒绝，提示"通行证已过期"
 超时 → ❌ 拒绝，提示哪个 agent 超时
 ```
 

@@ -135,19 +135,25 @@
       "Bash(npm audit *)",
       "Bash(chmod +x \"d:/黑马记账app/.git/hooks/pre-commit\")",
       "Bash(mkdir -p \"d:/黑马记账app/.claude/markers\")",
+      "Bash(mkdir -p .claude/markers)",
+      "Bash(git write-tree *)",
       "Bash(rm -f \"d:/黑马记账app/.claude/markers/*\")",
       "Bash(rm -f .claude/markers/*.json)",
       "Bash(git rev-parse HEAD)",
       "Bash(sleep *)",
       "Bash(test -f *)",
-      "Bash(git reset *)"
+      "Bash(git reset *)",
+      "Bash(rm -f d:/黑马记账app/.claude/markers/test-result.json d:/黑马记账app/.claude/markers/quality-result.json && echo \"markers cleaned\")",
+      "Read(//c/Users/73178/.claude/skills/run-tests/**)",
+      "Read(//c/Users/73178/.claude/skills/git-save/**)"
     ],
     "additionalDirectories": [
       "D:\\黑马记账app",
       "C:\\Users\\73178\\.ssh",
       "d:\\黑马记账app\\.claude",
       "d:\\黑马记账app\\.claude\\skills",
-      "C:\\Users\\73178\\.claude\\skills"
+      "C:\\Users\\73178\\.claude\\skills",
+      "d:\\黑马记账app\\.claude\\markers"
     ]
   }
 }

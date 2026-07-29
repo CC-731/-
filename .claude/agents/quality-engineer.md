@@ -134,17 +134,22 @@ tools: Read, Write, Edit, Grep, Glob, Bash, Skill
    ```bash
    git rev-parse HEAD
    ```
-3. **汇总评分**：
+3. **获取暂存区树哈希**（用于检测工作区是否在审查后被修改）：
+   ```bash
+   git write-tree 2>/dev/null || echo "no-commits-yet"
+   ```
+4. **汇总评分**：
    - 安全评分（满分 40）、注释评分（满分 35）、规范评分（满分 25）
    - 总分（满分 100）
    - 判断每个阈值是否达到
-4. **用 Write 工具写入 JSON 文件**，格式如下：
+5. **用 Write 工具写入 JSON 文件**，格式如下：
 
 ```json
 {
   "agent": "quality-engineer",
   "timestamp": "2026-07-29T14:30:10.000Z",
   "commit_hash": "abc1234",
+  "staged_tree": "abc123...",
   "outcome": "pass",
   "summary": {
     "total_score": 78,
