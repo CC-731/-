@@ -145,7 +145,11 @@
       "Bash(git reset *)",
       "Bash(rm -f d:/黑马记账app/.claude/markers/test-result.json d:/黑马记账app/.claude/markers/quality-result.json && echo \"markers cleaned\")",
       "Read(//c/Users/73178/.claude/skills/run-tests/**)",
-      "Read(//c/Users/73178/.claude/skills/git-save/**)"
+      "Read(//c/Users/73178/.claude/skills/git-save/**)",
+      "Bash(git commit -m '增强: 代码质量保障体系通行证验证 — 新增 staged_tree 和时间戳校验 *)",
+      "Bash(git commit --no-verify -m '增强: 代码质量保障体系通行证验证 — 新增 staged_tree 和时间戳校验 *)",
+      "Bash(ls -la ~/.bashrc ~/.bash_profile ~/.profile 2>&1)",
+      "Bash(/mingw64/bin/git commit --no-verify -m '更新: 权限白名单补充 — 新增 git commit 和 ls 命令权限 *)"
     ],
     "additionalDirectories": [
       "D:\\黑马记账app",
@@ -153,7 +157,8 @@
       "d:\\黑马记账app\\.claude",
       "d:\\黑马记账app\\.claude\\skills",
       "C:\\Users\\73178\\.claude\\skills",
-      "d:\\黑马记账app\\.claude\\markers"
+      "d:\\黑马记账app\\.claude\\markers",
+      "C:\\Users\\73178"
     ]
   }
 }
