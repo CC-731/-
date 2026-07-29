@@ -6,6 +6,19 @@ import { getUserCategories, addUserCategory, updateUserCategory, deleteUserCateg
 import { refreshMergedCategories, categories as presetCategories } from '../data/categories'
 import type { UserCategory } from '../types'
 
+/**
+ * 分类管理页面
+ *
+ * 通俗解释：除了 10 个预设分类（餐饮、交通...），你可以在这里添加自己的分类。
+ * 比如"投资"、"宠物"，每个人都有自己独特的花钱方向。
+ *
+ * 功能：
+ *   - 查看预设分类（带🔒锁图标，不能修改删除）
+ *   - 添加自定义分类（选图标、取名字、添加小类）
+ *   - 修改/删除自定义分类
+ *   - 删除自定义分类后，该分类下的账单自动迁移到"其他"
+ */
+
 // 可供选择的 emoji 图标列表
 const EMOJI_LIST = [
   '🍽️', '🚗', '🛒', '🏠', '🎮', '🏥', '📚', '📱', '👗', '📦',
@@ -112,10 +125,9 @@ export default function CategoryManage() {
       // 刷新页面数据和全局缓存
       await loadUserCategories()
       await refreshMergedCategories()
-    } catch (err: any) {
-      if (err.message) {
-        message.error(err.message)
-      }
+    } catch (err: unknown) {
+      const saveErrMsg = err instanceof Error ? err.message : '保存分类失败'
+      message.error(saveErrMsg)
     }
   }
 
@@ -126,10 +138,9 @@ export default function CategoryManage() {
       message.success('分类已删除，相关账单已移至「📦 其他」')
       await loadUserCategories()
       await refreshMergedCategories()
-    } catch (err: any) {
-      if (err.message) {
-        message.error(err.message)
-      }
+    } catch (err: unknown) {
+      const delErrMsg = err instanceof Error ? err.message : '删除分类失败'
+      message.error(delErrMsg)
     }
   }
 

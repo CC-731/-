@@ -1,3 +1,16 @@
+/**
+ * 黑马记账 — 应用根组件
+ *
+ * 通俗解释：这是整个 App 的"骨架"，左侧是导航菜单，右侧是对应的页面内容。
+ * 就像一本书的目录和正文一样：左边点导航，右边显示对应页面。
+ *
+ * 包含 5 个页面：
+ *   - 账单列表（首页）— 查看所有记账记录
+ *   - 记一笔 — 添加新账单
+ *   - 统计 — 按分类查看支出汇总
+ *   - 分类管理 — 添加/修改/删除自定义分类
+ *   - 贪吃蛇 — 小游戏彩蛋
+ */
 import { useState } from 'react'
 import { Layout, Menu } from 'antd'
 import {
@@ -16,6 +29,7 @@ const { Header, Content, Sider } = Layout
 
 type Page = 'add' | 'list' | 'stats' | 'categories' | 'game'
 
+/** 应用根组件 — 左侧菜单 + 右侧内容区的布局容器 */
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('list')
 

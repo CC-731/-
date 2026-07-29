@@ -25,8 +25,8 @@ app.get('/api/bills', (req, res) => {
     const category = req.query.category_l1 as string | undefined
     const bills = getBills(category ? { category_l1: category } : undefined)
     res.json(bills)
-  } catch (err) {
-    console.error(err)
+  } catch (err: unknown) {
+    console.error('加载账单失败:', err instanceof Error ? err.message : String(err))
     res.status(500).json({ error: '加载账单失败' })
   }
 })
@@ -35,13 +35,31 @@ app.get('/api/bills', (req, res) => {
 app.post('/api/bills', (req, res) => {
   try {
     const { amount, date, category_l1, category_l2, note } = req.body
-    if (!amount || !date || !category_l1 || !category_l2) {
+
+    // 必填字段检查
+    if (!date || !category_l1 || !category_l2) {
       return res.status(400).json({ error: '请填写完整信息' })
     }
+
+    // 金额必须是大於 0 的数字（typeof 检查防止传入字符串）
+    if (typeof amount !== 'number' || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: '金额必须是大于 0 的数字' })
+    }
+
+    // 金额上限：防止超大值
+    if (amount > 999999.99) {
+      return res.status(400).json({ error: '金额超出允许范围' })
+    }
+
+    // 备注长度限制：防止超大文本（前端限制 200，服务端兜底限制 500）
+    if (typeof note === 'string' && note.length > 500) {
+      return res.status(400).json({ error: '备注不能超过 500 个字符' })
+    }
+
     const result = addBill({ amount, date, category_l1, category_l2, note })
     res.json(result)
-  } catch (err) {
-    console.error(err)
+  } catch (err: unknown) {
+    console.error('添加账单失败:', err instanceof Error ? err.message : String(err))
     res.status(500).json({ error: '添加账单失败' })
   }
 })
@@ -52,8 +70,8 @@ app.delete('/api/bills/:id', (req, res) => {
     const id = parseInt(req.params.id)
     const result = deleteBill(id)
     res.json(result)
-  } catch (err) {
-    console.error(err)
+  } catch (err: unknown) {
+    console.error('删除账单失败:', err instanceof Error ? err.message : String(err))
     res.status(500).json({ error: '删除账单失败' })
   }
 })
@@ -63,8 +81,8 @@ app.get('/api/stats', (_req, res) => {
   try {
     const stats = getCategoryStats()
     res.json(stats)
-  } catch (err) {
-    console.error(err)
+  } catch (err: unknown) {
+    console.error('加载统计失败:', err instanceof Error ? err.message : String(err))
     res.status(500).json({ error: '加载统计失败' })
   }
 })
@@ -76,8 +94,8 @@ app.get('/api/user-categories', (_req, res) => {
   try {
     const categories = getUserCategories()
     res.json(categories)
-  } catch (err) {
-    console.error(err)
+  } catch (err: unknown) {
+    console.error('加载分类失败:', err instanceof Error ? err.message : String(err))
     res.status(500).json({ error: '加载分类失败' })
   }
 })
@@ -91,9 +109,10 @@ app.post('/api/user-categories', (req, res) => {
     }
     const result = addUserCategory({ name, icon: icon || '📌', subs })
     res.json(result)
-  } catch (err: any) {
-    console.error(err)
-    res.status(400).json({ error: err.message || '新增分类失败' })
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : '新增分类失败'
+    console.error('新增分类失败:', errMsg)
+    res.status(400).json({ error: errMsg })
   }
 })
 
@@ -112,9 +131,10 @@ app.put('/api/user-categories/:id', (req, res) => {
       oldName: oldName || name,
     })
     res.json(result)
-  } catch (err: any) {
-    console.error(err)
-    res.status(400).json({ error: err.message || '更新分类失败' })
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : '更新分类失败'
+    console.error('更新分类失败:', errMsg)
+    res.status(400).json({ error: errMsg })
   }
 })
 
@@ -124,13 +144,18 @@ app.delete('/api/user-categories/:id', (req, res) => {
     const id = parseInt(req.params.id)
     const result = deleteUserCategory(id)
     res.json(result)
-  } catch (err: any) {
-    console.error(err)
-    res.status(400).json({ error: err.message || '删除分类失败' })
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : '删除分类失败'
+    console.error('删除分类失败:', errMsg)
+    res.status(400).json({ error: errMsg })
   }
 })
 
-// SPA 回退
+// SPA（单页应用，Single Page Application）回退路由
+// 通俗解释：当用户在浏览器直接访问某个路径（比如刷新页面），
+// 浏览器会向服务器请求这个路径。但服务器上并没有对应的文件，
+// 所以把所有请求都"兜底"返回 index.html，由前端 React 来决定显示哪个页面。
+// 就像一栋大楼只有一个大门，不管你去几楼，都从这个门进去，再由里面的前台引导你。
 app.get('*', (_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))
 })

@@ -4,11 +4,26 @@ import { categories as presetCategories, getMergedCategories, refreshMergedCateg
 import type { Category } from '../data/categories'
 
 interface CategoryPickerProps {
+  /** 当前选中的分类（一级 + 二级），受控组件的值 */
   value?: { category_l1: string; category_l2: string }
+  /** 选中分类变化时的回调，传出新的一级+二级分类 */
   onChange?: (value: { category_l1: string; category_l2: string }) => void
-  categories?: Category[]  // 可选：外部传入的合并分类
+  /** 可选：外部传入的合并分类列表（预设 + 用户自定义），不传则组件自动加载 */
+  categories?: Category[]
 }
 
+/**
+ * 两级分类联动选择器
+ *
+ * 通俗解释：两个下拉框连在一起 —— 选了"餐饮"后第二个框自动显示"午餐、晚餐..."。
+ * 第一个框选一级分类（如：餐饮、交通），第二个框跟随显示二级分类（如：午餐、地铁）。
+ *
+ * 使用方式：
+ *   <CategoryPicker
+ *     value={{ category_l1: '餐饮', category_l2: '午餐' }}
+ *     onChange={(val) => console.log(val.category_l1, val.category_l2)}
+ *   />
+ */
 export default function CategoryPicker({ value, onChange, categories }: CategoryPickerProps) {
   const [selectedL1, setSelectedL1] = useState<string>(value?.category_l1 || '')
   const [selectedL2, setSelectedL2] = useState<string>(value?.category_l2 || '')
@@ -71,12 +86,19 @@ export default function CategoryPicker({ value, onChange, categories }: Category
   )
 }
 
-// 用于展示的分类标签（只读模式）
+/**
+ * 分类标签（只读展示）
+ *
+ * 通俗解释：在账单列表中显示"🍽️ 餐饮 / 午餐"这样的绿色标签，
+ * 只是展示分类信息，不能点击修改。和上面的 CategoryPicker（可选择）是配套的。
+ */
 export function CategoryTag({
   category_l1,
   category_l2,
 }: {
+  /** 一级分类名 */
   category_l1: string
+  /** 二级分类名 */
   category_l2: string
 }) {
   const merged = getMergedCategories()

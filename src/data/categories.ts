@@ -1,4 +1,11 @@
-// 支出两级分类数据
+/**
+ * 支出两级分类数据
+ *
+ * 包含 10 个预设一级分类和对应的二级分类列表，
+ * 以及用户自定义分类的合并逻辑。
+ */
+import { getUserCategories } from '../api'
+
 export interface SubCategory {
   name: string
 }
@@ -9,6 +16,7 @@ export interface Category {
   subs: string[]
 }
 
+/** 预设的 10 个一级分类及其二级小类 */
 export const categories: Category[] = [
   {
     name: '餐饮',
@@ -63,8 +71,12 @@ export const categories: Category[] = [
 ]
 
 // ====== 分类合并：预设 + 用户自定义 ======
-
-import { getUserCategories } from '../api'
+//
+// 合并逻辑说明：
+//   1. 初始缓存只包含 10 个预设分类
+//   2. 调用 refreshMergedCategories() 从数据库拉取用户自定义分类，合并到缓存
+//   3. 如果数据库加载失败，回退到只使用预设分类（保证基础功能可用）
+//   4. getMergedCategories() 是同步的，直接返回缓存的合并结果
 
 // 合并缓存，初始只包含预设分类
 let mergedCache: Category[] = [...categories]

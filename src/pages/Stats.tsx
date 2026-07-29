@@ -1,11 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Card, Statistic, Row, Col, Table, message } from 'antd'
-import { WalletOutlined, FileTextOutlined } from '@ant-design/icons'
+import { FileTextOutlined } from '@ant-design/icons'
 import type { ColumnsType } from 'antd/es/table'
 import { CategoryStat } from '../types'
 import { getMergedCategories } from '../data/categories'
 import { getStats } from '../api'
 
+/**
+ * 支出统计页面
+ *
+ * 通俗解释：把你的花销按分类汇总，看看钱都花在哪了。
+ *
+ * 功能：
+ *   - 顶部两个概览卡片：总支出金额、总记账笔数
+ *   - 下方分类统计表：每个一级分类的笔数、总金额、占比
+ *   - 支持按笔数或金额排序
+ */
 export default function Stats() {
   const [stats, setStats] = useState<CategoryStat[]>([])
   const [loading, setLoading] = useState(false)
@@ -26,8 +36,9 @@ export default function Stats() {
     }
   }
 
-  const totalAmount = stats.reduce((sum, s) => sum + s.total, 0)
-  const totalCount = stats.reduce((sum, s) => sum + s.count, 0)
+  // 只在 stats 数据变化时重新计算，避免每次渲染都遍历数组
+  const totalAmount = useMemo(() => stats.reduce((sum, s) => sum + s.total, 0), [stats])
+  const totalCount = useMemo(() => stats.reduce((sum, s) => sum + s.count, 0), [stats])
 
   const getCategoryIcon = (name: string) => {
     return getMergedCategories().find((c) => c.name === name)?.icon || '📦'

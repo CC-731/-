@@ -5,9 +5,12 @@ import CategoryPicker from '../components/CategoryPicker'
 import { addBill as apiAddBill } from '../api'
 import { refreshMergedCategories } from '../data/categories'
 import type { Category } from '../data/categories'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
-// 简单日期格式化（不依赖外部库）
+/**
+ * 将 Date 对象转换为 YYYY-MM-DD 格式字符串
+ * 例如：new Date('2026-07-29') → '2026-07-29'
+ */
 function formatDate(date: Date): string {
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, '0')
@@ -16,9 +19,21 @@ function formatDate(date: Date): string {
 }
 
 interface AddBillProps {
+  /** 添加成功后触发的回调，通常用来跳转回账单列表页 */
   onSuccess?: () => void
 }
 
+/**
+ * 添加账单页面
+ *
+ * 通俗解释：这是"记账"的表单页，填金额、选日期、选分类、写备注，按提交就保存。
+ *
+ * 表单字段：
+ *   - 金额（必填）：人民币元，支持小数点后两位，最小 0.01
+ *   - 日期（必填）：默认当天，可手动选择
+ *   - 分类（必填）：两级联动选择（先选大类再选小类）
+ *   - 备注（选填）：最多 200 字
+ */
 export default function AddBill({ onSuccess }: AddBillProps) {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
@@ -34,7 +49,7 @@ export default function AddBill({ onSuccess }: AddBillProps) {
 
   const handleSubmit = async (values: {
     amount: number
-    date: any
+    date: Dayjs
     note?: string
   }) => {
     if (!categoryValue.category_l1 || !categoryValue.category_l2) {

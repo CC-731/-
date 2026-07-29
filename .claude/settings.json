@@ -108,11 +108,46 @@
       "Bash(ssh-keyscan -t ed25519 github.com >> \"$HOME/.ssh/known_hosts\" 2>/dev/null && echo \"GitHub已添加到可信列表\")",
       "Bash(git checkout *)",
       "Bash(cmd //c \"taskkill /PID 43652 /F\")",
-      "Bash(cmd //c \"taskkill /PID 15996 /F\")"
+      "Bash(cmd //c \"taskkill /PID 15996 /F\")",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/skills\")",
+      "WebSearch",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/skills/start-app\")",
+      "Bash(mv \"d:/黑马记账app/.claude/skills/start-app.md\" \"d:/黑马记账app/.claude/skills/start-app/SKILL.md\")",
+      "Bash(cmd //c \"netstat -ano | findstr :3456\")",
+      "Bash(cmd //c \"taskkill /PID 2292 /F\")",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/skills/rebuild-app\")",
+      "Edit(/.claude/skills/rebuild-app/**)",
+      "Bash(npm run *)",
+      "Bash(cmd //c \"taskkill /PID 30340 /F\")",
+      "Read(//c/Users/73178/.claude/**)",
+      "Bash(mkdir -p \"C:/Users/73178/.claude/skills/git-save\")",
+      "Edit(~/.claude/skills/git-save/**)",
+      "Bash(mkdir -p \"C:/Users/73178/.claude/skills/run-tests\")",
+      "Edit(~/.claude/skills/run-tests/**)",
+      "Bash(npx vitest *)",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/agents\")",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/skills/comments-check\")",
+      "Edit(/.claude/skills/comments-check/**)",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/skills/security-audit\")",
+      "Edit(/.claude/skills/security-audit/**)",
+      "Bash(npm audit *)",
+      "Bash(chmod +x \"d:/黑马记账app/.git/hooks/pre-commit\")",
+      "Bash(mkdir -p \"d:/黑马记账app/.claude/markers\")",
+      "Bash(rm -f \"d:/黑马记账app/.claude/markers/*\")",
+      "Bash(rm -f .claude/markers/*.json)",
+      "Bash(git rev-parse HEAD)",
+      "Bash(sleep *)",
+      "Bash(test -f *)",
+      "Bash(git reset *)"
     ],
     "additionalDirectories": [
       "D:\\黑马记账app",
-      "C:\\Users\\73178\\.ssh"
+      "C:\\Users\\73178\\.ssh",
+      "d:\\黑马记账app\\.claude",
+      "d:\\黑马记账app\\.claude\\skills",
+      "C:\\Users\\73178\\.claude\\skills"
     ]
   }
 }

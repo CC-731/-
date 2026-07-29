@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Table, Tag, Button, Popconfirm, message, Select, Space, Card } from 'antd'
 import { DeleteOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons'
 import * as XLSX from 'xlsx'
@@ -9,6 +9,18 @@ import type { Category } from '../data/categories'
 import { CategoryTag } from '../components/CategoryPicker'
 import { getBills, deleteBill } from '../api'
 
+/**
+ * 账单列表页面
+ *
+ * 通俗解释：这是一个"流水账"页面，列出你记过的所有花销记录。
+ *
+ * 功能：
+ *   - 按时间从新到旧显示所有账单
+ *   - 可按一级分类（餐饮、交通...）筛选
+ *   - 顶部显示总笔数和总金额
+ *   - 支持导出为 Excel 文件（.xlsx 格式）
+ *   - 每条记录可以删除（有确认弹窗）
+ */
 export default function BillList() {
   const [bills, setBills] = useState<Bill[]>([])
   const [loading, setLoading] = useState(false)
@@ -48,8 +60,8 @@ export default function BillList() {
     }
   }
 
-  // 计算总金额
-  const totalAmount = bills.reduce((sum, bill) => sum + bill.amount, 0)
+  // 计算总金额（useMemo：只在 bills 变化时重新计算，避免每次渲染都重复跑循环）
+  const totalAmount = useMemo(() => bills.reduce((sum, bill) => sum + bill.amount, 0), [bills])
 
   // 导出 Excel
   const handleExport = () => {

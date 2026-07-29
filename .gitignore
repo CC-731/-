@@ -8,6 +8,9 @@ node_modules/
 dist/
 dist-electron/
 
+# 质量检查通行证（临时文件，每次提交后清理）
+.claude/markers/
+
 # Electron 安装包和临时文件
 electron-v*.zip
 electron_extracted/
