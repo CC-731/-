@@ -1,3 +1,15 @@
+/**
+ * 黑马记账 — Express 服务器
+ *
+ * 职责：
+ *   1. 提供 REST API（账单 CRUD + 分类统计 + 用户自定义分类管理）
+ *   2. 托管前端静态文件（Vite 构建产物的 dist/ 目录）
+ *   3. SPA 回退路由（所有非 API 请求返回 index.html，由前端 React 处理）
+ *
+ * 启动命令：npm start（调用 start.ts）或 npm run server（直接启动）
+ * 默认端口：3456
+ */
+
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -160,7 +172,14 @@ app.get('*', (_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))
 })
 
-// 启动服务器
+/**
+ * 启动服务器。
+ *
+ * 先初始化数据库连接，然后监听 3456 端口。
+ * 返回一个 Promise，在服务器就绪后 resolve。
+ *
+ * 通俗理解：打开收银台，准备好记账本，开始接待顾客。
+ */
 export async function startServer() {
   await initDatabase()
   return new Promise<void>((resolve) => {
@@ -171,6 +190,13 @@ export async function startServer() {
   })
 }
 
+/**
+ * 获取服务器端口号。
+ *
+ * @returns 当前配置的端口号（默认 3456）
+ *
+ * 通俗理解：告诉你"收银台在几号窗口"。
+ */
 export function getPort() {
   return PORT
 }

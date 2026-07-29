@@ -23,18 +23,27 @@ export interface Bill {
 
 // 分类统计类型
 export interface CategoryStat {
+  /** 一级分类名，如"餐饮" */
   category_l1: string
+  /** 该分类下的账单笔数 */
   count: number
+  /** 该分类下的支出总金额 */
   total: number
 }
 
 // 用户自定义分类类型
 export interface UserCategory {
+  /** 分类唯一 ID（数据库自增） */
   id: number
+  /** 分类名称（唯一，不能与 10 个预设分类重名） */
   name: string
+  /** 分类图标（emoji，默认 📌） */
   icon: string
+  /** 二级小类名称列表，如 ["早餐", "午餐"] */
   subs: string[]
+  /** 创建时间，数据库自动填充 */
   created_at: string
+  /** 最后更新时间，数据库自动填充 */
   updated_at: string
 }
 

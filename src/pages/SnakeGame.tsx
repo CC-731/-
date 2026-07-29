@@ -1,3 +1,26 @@
+/**
+ * 贪吃蛇小游戏
+ *
+ * 经典贪吃蛇游戏的 React + Canvas 实现，作为记账应用的休闲娱乐模块。
+ *
+ * ## 玩法说明
+ * - 用方向键或 WASD 控制蛇的移动方向
+ * - 吃红色食物得分（每个 10 分），蛇身变长
+ * - 撞墙或撞到自己 → 游戏结束
+ * - 最高分保存在浏览器 localStorage 中
+ *
+ * ## 技术要点
+ * - Canvas 2D 渲染，使用 requestAnimationFrame 风格的 setInterval 定时器
+ * - 三种难度：简单(150ms/步)、普通(100ms/步)、困难(60ms/步)
+ * - useRef 保存蛇身、食物、方向，避免频繁 re-render
+ * - 蛇头画眼睛，身体渐变透明，食物带发光效果
+ *
+ * ## 设计决策
+ * - 分数由蛇身长度直接计算 `(snake.length - 3) * 10`，避免 state 与 ref 不同步
+ * - 最高分用 ref 冗余保存，解决 gameOver 回调中的过期闭包问题
+ * - 食物生成：棋盘空闲格子 >25% 时随机重试，否则枚举所有空闲格（避免死循环）
+ */
+
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Card, Button, Select, Space, Tag, Divider } from 'antd'
 import { PlayCircleOutlined, PauseCircleOutlined, ReloadOutlined, TrophyOutlined } from '@ant-design/icons'
@@ -39,7 +62,12 @@ const INIT_SNAKE: Point[] = [
   { x: 8, y: 10 },
 ]
 
-// 随机生成食物，避开蛇身
+/**
+ * 在棋盘空位上随机生成一个食物，避开蛇身占据的格子。
+ *
+ * 优化策略：当空闲格子少于 25% 时枚举所有空位（O(n)），
+ * 否则随机重试（平均 O(1)），避免极端情况下死循环。
+ */
 function spawnFood(snake: Point[]): Point {
   const occupied = new Set(snake.map((p) => `${p.x},${p.y}`))
   const freeCount = TOTAL_CELLS - snake.length
@@ -76,6 +104,12 @@ function spawnFood(snake: Point[]): Point {
   return food
 }
 
+/**
+ * 贪吃蛇游戏主组件。
+ *
+ * 状态机：idle（未开始）→ playing（进行中）→ paused（暂停）/ over（结束）
+ * 使用 Canvas 绘制游戏画面，右侧面板显示分数、难度选择和控制按钮。
+ */
 export default function SnakeGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const snakeRef = useRef<Point[]>(INIT_SNAKE)

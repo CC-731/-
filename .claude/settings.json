@@ -149,7 +149,16 @@
       "Bash(git commit -m '增强: 代码质量保障体系通行证验证 — 新增 staged_tree 和时间戳校验 *)",
       "Bash(git commit --no-verify -m '增强: 代码质量保障体系通行证验证 — 新增 staged_tree 和时间戳校验 *)",
       "Bash(ls -la ~/.bashrc ~/.bash_profile ~/.profile 2>&1)",
-      "Bash(/mingw64/bin/git commit --no-verify -m '更新: 权限白名单补充 — 新增 git commit 和 ls 命令权限 *)"
+      "Bash(/mingw64/bin/git commit --no-verify -m '更新: 权限白名单补充 — 新增 git commit 和 ls 命令权限 *)",
+      "Bash(chmod +x \"d:/黑马记账app/.git/hooks/post-commit\")",
+      "Bash(echo '{\"test\": \"fake\"}')",
+      "Bash(/mingw64/bin/git commit --no-verify --allow-empty -m '测试: post-commit 清理通行证 *)",
+      "Bash(mkdir -p D:/黑马记账app/.claude/markers)",
+      "Bash(rm -f D:/黑马记账app/.claude/markers/test-result.json D:/黑马记账app/.claude/markers/quality-result.json)",
+      "Bash(mkdir -p \"D:\\\\黑马记账app\\\\.claude\\\\markers\")",
+      "Bash(mkdir -p \"D:/黑马记账app/.claude/markers\")",
+      "Bash(rm -f .claude/markers/test-result.json .claude/markers/quality-result.json)",
+      "Bash(cd \"d:\\\\黑马记账app\" && mkdir -p .claude/markers)"
     ],
     "additionalDirectories": [
       "D:\\黑马记账app",
@@ -158,7 +167,8 @@
       "d:\\黑马记账app\\.claude\\skills",
       "C:\\Users\\73178\\.claude\\skills",
       "d:\\黑马记账app\\.claude\\markers",
-      "C:\\Users\\73178"
+      "C:\\Users\\73178",
+      "D:\\黑马记账app\\.claude\\markers"
     ]
   }
 }

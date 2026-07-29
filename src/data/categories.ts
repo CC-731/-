@@ -81,12 +81,23 @@ export const categories: Category[] = [
 // 合并缓存，初始只包含预设分类
 let mergedCache: Category[] = [...categories]
 
-// 获取合并后的分类（同步，返回缓存值）
+/**
+ * 获取合并后的分类列表（同步读取缓存）。
+ *
+ * 返回预设分类 + 用户自定义分类的合并结果。
+ * 注意：这是同步方法，只返回内存缓存。如需获取最新数据，
+ * 请先调用 refreshMergedCategories() 刷新缓存。
+ */
 export function getMergedCategories(): Category[] {
   return mergedCache
 }
 
-// 刷新合并分类缓存（异步，从数据库拉取用户分类并与预设合并）
+/**
+ * 刷新合并分类缓存（异步，从数据库拉取用户分类并与预设合并）。
+ *
+ * 加载成功：缓存 = 预设 + 用户自定义
+ * 加载失败：缓存回退为仅预设分类（保证基础功能可用）
+ */
 export async function refreshMergedCategories(): Promise<Category[]> {
   try {
     const userCategories = await getUserCategories()
@@ -103,7 +114,15 @@ export async function refreshMergedCategories(): Promise<Category[]> {
   return mergedCache
 }
 
-// 直接获取合并分类（异步，不依赖缓存）
+/**
+ * 直接获取合并分类（异步，每次请求数据库，不依赖缓存）。
+ *
+ * 与 getMergedCategories() 的区别：
+ * - getMergedCategories：读缓存，同步，快但可能不是最新
+ * - getAllCategories：查数据库，异步，总是最新数据
+ *
+ * 使用场景：分类管理页面需要实时反映数据库变更时使用。
+ */
 export async function getAllCategories(): Promise<Category[]> {
   try {
     const userCategories = await getUserCategories()
