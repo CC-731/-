@@ -41,7 +41,11 @@ function saveDatabase() {
  * 没有就买一本新的并画好表格。
  */
 export async function initDatabase() {
-  const userDataDir = path.join(__dirname, '..', 'data')
+  // 桌面版通过环境变量把数据放到 Windows 用户数据目录。
+  // 浏览器开发模式保持原来的项目 data/ 目录，兼容现有使用方式。
+  const userDataDir = process.env.HEIMAA_DATA_DIR
+    ? path.resolve(process.env.HEIMAA_DATA_DIR)
+    : path.join(__dirname, '..', 'data')
   if (!fs.existsSync(userDataDir)) {
     fs.mkdirSync(userDataDir, { recursive: true })
   }

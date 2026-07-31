@@ -13,6 +13,7 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
+import type { Server } from 'http'
 import { fileURLToPath } from 'url'
 import { initDatabase, getBills, addBill, deleteBill, getCategoryStats, getUserCategories, addUserCategory, updateUserCategory, deleteUserCategory } from './database.js'
 
@@ -21,12 +22,15 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 const PORT = 3456
+const HOST = '127.0.0.1'
 
 app.use(cors())
 app.use(express.json())
 
 // 提供前端静态文件
-const distPath = path.join(__dirname, '..', 'dist')
+const distPath = process.env.HEIMAA_DIST_DIR
+  ? path.resolve(process.env.HEIMAA_DIST_DIR)
+  : path.join(__dirname, '..', 'dist')
 app.use(express.static(distPath))
 
 // ====== REST API ======
@@ -182,11 +186,12 @@ app.get('*', (_req, res) => {
  */
 export async function startServer() {
   await initDatabase()
-  return new Promise<void>((resolve) => {
-    app.listen(PORT, () => {
-      console.log(`黑马记账服务器已启动: http://localhost:${PORT}`)
-      resolve()
+  return new Promise<Server>((resolve, reject) => {
+    const server = app.listen(PORT, HOST, () => {
+      console.log(`黑马记账本地服务已启动: http://${HOST}:${PORT}`)
+      resolve(server)
     })
+    server.once('error', reject)
   })
 }
 
