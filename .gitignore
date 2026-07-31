@@ -7,6 +7,7 @@ node_modules/
 # 编译产物（可重新生成）
 dist/
 dist-electron/
+release/
 
 # 质量检查通行证（临时文件，每次提交后清理）
 .claude/markers/

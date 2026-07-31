@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "concurrently \"vite\" \"tsx watch server/server.ts\"",
     "dev:all": "tsx start.ts",
-    "build": "vite build",
+    "build:web": "vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "npm run build:web && npm run build:electron",
+    "desktop": "npm run build && electron .",
+    "package:win": "npm run build && electron-builder --win",
     "start": "tsx start.ts",
     "server": "tsx server/server.ts",
     "test": "vitest run",
@@ -35,11 +39,54 @@
     "concurrently": "^8.2.0",
     "cross-env": "^7.0.0",
     "electron": "^28.3.3",
+    "electron-builder": "^26.15.3",
     "jsdom": "^29.1.1",
     "tsx": "^4.19.0",
     "typescript": "^5.5.0",
     "vite": "^5.4.0",
     "vitest": "^4.1.10"
   },
-  "main": "dist-electron/main.js"
+  "main": "dist-electron/electron/main.js",
+  "build": {
+    "appId": "com.heimaa.accounting",
+    "productName": "黑马记账",
+    "asar": true,
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "artifactName": "黑马记账-安装版-${version}-${arch}.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "黑马记账",
+      "deleteAppDataOnUninstall": false
+    },
+    "portable": {
+      "artifactName": "黑马记账-免安装版-${version}-${arch}.${ext}"
+    }
+  }
 }
